@@ -20,7 +20,7 @@ options
 
 * --output=FOLDER : Specify the output folder to FOLDER for the generated .md files. Default is ./output.
 * --image-prefix=PREFIX : For each embedded images, add the PREFIX before the image link. Useful to set the image folder.
-* --html-image=1 : 1 to use HTML '<img>' tag for image. 0 to use markdown '![]()' for image. Default is 1.
+* --html-image=1 : 1 to use HTML `<img>` tag for image. 0 to use markdown `![]()` for image. Default is 1.
 * --config=PERLSCRIPT : The PERLSCRIPT is executed in doku2md, the script can modify any 'our' variables in doku2md.
 
 inputFile: The file name of the Dokuwiki page file. It can contain wildcard. The inputFile can be specified multiple times.
