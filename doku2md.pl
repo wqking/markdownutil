@@ -147,14 +147,23 @@ sub usage
 	
 	print $message, "\n" if defined($message);
 	print <<EOM;
-doku2md converts Dokuwiki page files to Github flavored Markdown files.
+doku2md version 0.1.
+Github: https://github.com/wqking/markdownutil
+
+doku2md converts Dokuwiki document to Github flavored Markdown document.
+
 usage: perl doku2md.pl [options] inputFile [more inputFile]
 options:
-    --output=FOLDER          specify the output folder to FOLDER for the generated .md files. Default is ./output
-    --image-prefix=PREFIX    for each embedded images, add the PREFIX before the image link. Useful to specify the image folder.
-    --config=PERLSCRIPT      ask doku2md to execute the PERLSCRIPT, the script can modify any 'our' variables in doku2md.
-inputFile: the file name of the Dokuwiki page file. It can contain wildcard. The inputFile can be specified multiple times.
+    --output=FOLDER          Specify the output folder to FOLDER for the
+                             generated .md files. Default is ./output.
+    --image-prefix=PREFIX    For each embedded images, add the PREFIX before
+                             the image link. Useful to set the image folder.
+    --config=PERLSCRIPT      The PERLSCRIPT is executed in doku2md, the script
+                             can modify any 'our' variables in doku2md.
+inputFile: The file name of the Dokuwiki page file. It can contain wildcard.
+The inputFile can be specified multiple times.
 EOM
+
 	die "\n";
 }
 

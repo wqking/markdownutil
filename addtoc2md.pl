@@ -78,7 +78,7 @@ options:
                           put the TOC in front of the document. Default is 0.
                           The is option is not used if there is <!--toc--> mark
                           in the document.
-inputFile: the file name of the markdown file (.md). It can contain wildcard.
+inputFile: The file name of the markdown file (.md). It can contain wildcard.
 The inputFile can be specified multiple times.
 
 Heading depth: h1 has depth 1, h2 has depth 2, etc.
