@@ -89,6 +89,7 @@ our %linkTitleMap = (
 my $args = {
 	'output' => './output',
 	'imagePrefix' => '',
+	'htmlImage' => 1,
 	'config' => '',
 	'patterns' => [],
 };
@@ -118,6 +119,9 @@ sub doParseArgs
 		}
 		elsif($arg =~ /^\-\-image\-prefix=(.*)/) {
 			$args->{imagePrefix} = $1;
+		}
+		elsif($arg =~ /^\-\-html\-image=(.*)/) {
+			$args->{htmlImage} = $1 + 0;
 		}
 		elsif($arg =~ /^\-\-config=(.*)/) {
 			$args->{config} = $1;
@@ -158,6 +162,8 @@ options:
                              generated .md files. Default is ./output.
     --image-prefix=PREFIX    For each embedded images, add the PREFIX before
                              the image link. Useful to set the image folder.
+    --html-image=1           1 to use HTML '<img>' tag for image. 0 to use
+                             markdown '![]()' for image. Default is 1.
     --config=PERLSCRIPT      The PERLSCRIPT is executed in doku2md, the script
                              can modify any 'our' variables in doku2md.
 inputFile: The file name of the Dokuwiki page file. It can contain wildcard.
@@ -318,8 +324,22 @@ sub doReplaceImage
 	
 	$fileName = $args->{imagePrefix} . $fileName;
 	
+	if($title eq '') {
+		$title = $fileName;
+	}
+	
 	my $result = '';
-	if(0) {
+	if($args->{htmlImage}) {
+		$result .= '<img src="' . $fileName . '"';
+		if($width ne '') {
+			$result .= ' width=' . $width;
+		}
+		if($height ne '') {
+			$result .= ' height=' . $height;
+		}
+		$result .= ' />';
+	}
+	else {
 		$result .= '![' . $title . '](' . $fileName;
 		if($width ne '') {
 			$result .= ' =' . $width . 'x';
@@ -328,16 +348,6 @@ sub doReplaceImage
 			$result .= $height;
 		}
 		$result .= ')';
-	}
-	else {
-		$result .= '<img src="' . $fileName . '"';
-		if($width ne '') {
-			$result .= ' width=' . $width;
-		}
-		if($height ne '') {
-			$result .= ' height=' . $height;
-		}
-		$result .= '>';
 	}
 	
 	return $result;
