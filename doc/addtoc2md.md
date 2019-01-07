@@ -4,7 +4,35 @@
 
 addtoc2md.pl creates and insert table of content to Github flavored Markdown file.  
 The TOC is generated from the headings in the markdown document.  
-Code blocks can be handled correct, the code lines start with '#' won't be treated as headings.
+Code blocks can be handled correct, the code lines start with '#' won't be treated as headings.  
+The generated TOC doesn't depend on Github auto anchor features.  
+If we have the markdown as
+
+```
+# I'm h1
+
+## I'm h2
+### I'm h3
+## I'm another h2
+```
+
+The generated markdown will be
+
+```
+# I'm h1
+<!--begintoc-->
+* [I'm h2](#a2_1)
+  * [I'm h3](#a3_1)
+* [I'm another h2](#a2_2)
+<!--endtoc-->
+
+<a id="a2_1"></a>
+## I'm h2
+<a id="a3_1"></a>
+### I'm h3
+<a id="a2_2"></a>
+## I'm another h2
+```
 
 ## Command line usage
 `perl addtoc2md.pl [options] inputFile [more inputFile]`
