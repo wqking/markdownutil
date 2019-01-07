@@ -30,6 +30,9 @@ sub doParseArgs
 		if($arg =~ /^\-\-min\-headings=(.*)/) {
 			$args->{minHeadingCount} = $1 + 0;
 		}
+		elsif($arg =~ /^\-\-min\-depth=(.*)/) {
+			$args->{minDepth} = $1 + 0;
+		}
 		elsif($arg =~ /^\-\-max\-depth=(.*)/) {
 			$args->{maxDepth} = $1 + 0;
 		}
@@ -53,6 +56,40 @@ sub doParseArgs
 
 sub usage
 {
+	my ($message) = @_;
+	
+	print $message, "\n" if defined($message);
+	print <<EOM;
+addtoc2md version 0.1.
+Github: https://github.com/wqking/markdownutil
+
+addtoc2md adds table of content to Github flavored Markdown files.
+
+usage: perl addtoc2md.pl [options] inputFile [more inputFile]
+options:
+    --min-headings=N      Set minimum heading count to N. If the valid heading
+                          count is smaller than N, no TOC is created.
+                          Default is 6.
+    --min-depth=N         Set minimum depth to N. A heading depth smaller than
+                          N is invalid and not included in TOC. Default is 2.
+    --max-depth=N         Set maximum depth to N. A heading depth larger than N
+                          is invalid and not included in TOC. Default is 3.
+	--front=0             0 to put the TOC after the first valid heading. 1 to
+                          put the TOC in front of the document. Default is 0.
+                          The is option is not used if there is <!--toc--> mark
+                          in the document.
+inputFile: the file name of the markdown file (.md). It can contain wildcard.
+The inputFile can be specified multiple times.
+
+Heading depth: h1 has depth 1, h2 has depth 2, etc.
+If there is <!--toc--> in the document (in a whole line), the TOC will be
+put in place of <!--toc--> mark.
+The option --front only takes effect when there is no <!--toc--> mark.
+If there is <!--notoc--> in the document (in a whole line), the TOC will not
+be generated.
+EOM
+
+	die "\n";
 }
 
 sub doProcessPattern
