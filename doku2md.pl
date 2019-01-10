@@ -59,7 +59,7 @@ our @replaceList = (
 	
 	# images
 	{
-		pattern => qr!{{(.*?\.(jpg|png|gif).*?)}}!ms,
+		pattern => qr!\{\{(.*?\.(jpg|png|gif).*?)\}\}!ms,
 		replacer => '" . doReplaceImage($1) . "',
 		noRecurse => 1,
 	},
@@ -73,7 +73,7 @@ our @replaceList = (
 
 	# special
 	{
-		pattern => qr!{{tag.*?}}!ms,
+		pattern => qr!\{\{tag.*?\}\}!ms,
 		replacer => ''
 	},
 );
