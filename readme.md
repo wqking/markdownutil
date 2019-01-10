@@ -10,10 +10,33 @@ Apache License, Version 2.0
 
 ## The scripts
 
-* addtoc2md.pl -- adds table of content to Github flavored Markdown files.
-* doku2md.pl -- converts Dokuwiki page files to Github flavored Markdown files.
+### addtoc2md.pl
 
-## Documents
+Adds table of content to Github flavored Markdown files.
 
-* [Document for addtoc2md.pl](doc/addtoc2md.md)
-* [Document for doku2md.pl](doc/doku2md.md)
+**Features**  
+
+* Use `<a>` anchor tag as the TOC target. It doesn't depend on Github auto anchor feature.  
+* Can selectively generate TOC for lengthy article with enough headings. (The `--min-headings` option)
+
+**[Document for addtoc2md.pl](doc/addtoc2md.md)**
+
+### doku2md.pl
+
+Converts Dokuwiki page files to Github flavored Markdown files.  
+
+**Features**  
+
+* Support basic heading and format syntax.  
+* Support URL link syntax.  
+* Support image syntax.  
+* Customizable.  
+
+**[Document for doku2md.pl](doc/doku2md.md)**
+
+## Pull requests are welcome
+
+Even though the scripts are quite simple, here are some work you can contribute.  
+
+* Convert the Perl scripts to Python and PHP.  
+* Add more functions to the scripts.  

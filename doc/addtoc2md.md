@@ -8,6 +8,13 @@ Code blocks can be handled correct, the code lines start with '#' won't be treat
 The generated TOC doesn't depend on Github auto anchor features.  
 If we have the markdown as
 
+**Features**  
+
+* Use `<a>` anchor tag as the TOC target. It doesn't depend on Github auto anchor feature.  
+* Can selectively generate TOC for lengthy article with enough headings. (The `--min-headings` option)
+
+**[Document for addtoc2md.pl](doc/addtoc2md.md)**
+
 ```
 # I'm h1
 
@@ -46,3 +53,10 @@ options
 
 inputFile  
 The file name of the markdown file (.md). It can contain wildcard. The inputFile can be specified multiple times.
+
+## Why anther tool while there are existing tools to add TOC to markdown?
+
+Because I need some features lacked in other tools  
+
+1. Use `<a>` anchor tag as the TOC target. So that the existing markdown-to-HTML converter is happy with the TOC.  
+2. Selectively generate TOC for lengthy article with enough headings. I don't want to add `<!--toc->` for every article manually, and I want only longer article has TOC.
