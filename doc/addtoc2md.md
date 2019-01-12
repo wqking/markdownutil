@@ -10,7 +10,7 @@ The TOC is generated from the headings in the markdown document.
 * Use `<a>` anchor tag as the TOC target. It doesn't depend on Github auto anchor feature.  
 * Can selectively generate TOC for lengthy article with enough headings. (The `--min-headings` option)
 * Repeating the command on the same file will replace the previous TOC instead of adding more TOC.
-* Code blocks can be handled correct, the code lines start with '#' won't be treated as headings.  
+* Code blocks can be handled correctly, the code lines start with '#' won't be treated as headings.  
 
 ## Command line usage
 `perl addtoc2md.pl [options] inputFile [more inputFile]`
