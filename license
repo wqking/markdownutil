@@ -1,6 +1,6 @@
-eventpp library
+A collection of Perl scripts to manipulate markdown files
 
-Copyright (C) 2018 Wang Qi (wqking)
+Copyright (C) 2019 Wang Qi (wqking)
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
