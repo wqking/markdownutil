@@ -1,8 +1,8 @@
-# addtoc2md.pl -- Adds table of content to Github flavored Markdown files
+# addtoc2md.pl -- Adds table of contents to Github flavored Markdown files
 
 ## Overview
 
-addtoc2md.pl creates and insert table of content to Github flavored Markdown file.  
+addtoc2md.pl creates and insert table of contents to Github flavored Markdown file.  
 The TOC is generated from the headings in the markdown document.  
 
 ## Features  

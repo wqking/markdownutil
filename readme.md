@@ -12,7 +12,7 @@ Apache License, Version 2.0
 
 ### addtoc2md.pl
 
-Adds table of content to Github flavored Markdown files.
+Adds table of contents to Github flavored Markdown files.
 
 **Features**  
 
