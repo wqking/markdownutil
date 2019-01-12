@@ -9,9 +9,8 @@ The TOC is generated from the headings in the markdown document.
 
 * Use `<a>` anchor tag as the TOC target. It doesn't depend on Github auto anchor feature.  
 * Can selectively generate TOC for lengthy article with enough headings. (The `--min-headings` option)
-* Repeated calling the command on the same file will replace the previous TOC, not add more TOC.
+* Repeating the command on the same file will replace the previous TOC instead of adding more TOC.
 * Code blocks can be handled correct, the code lines start with '#' won't be treated as headings.  
-* The generated TOC doesn't depend on Github auto anchor features.  
 
 ## Command line usage
 `perl addtoc2md.pl [options] inputFile [more inputFile]`
@@ -19,8 +18,8 @@ The TOC is generated from the headings in the markdown document.
 options
 
 * --min-headings=N : Set minimum heading count to N. If the valid heading count is smaller than N, no TOC is created. Default is 6.
-* --min-depth=N : Set minimum depth to N. A heading depth smaller than N is invalid and not included in TOC. Default is 2.
-* --max-depth=N : Set maximum depth to N. A heading depth larger than N is invalid and not included in TOC. Default is 3.
+* --min-level=N : Set minimum level to N. A heading level smaller than N is invalid and not included in TOC. Default is 2.
+* --max-level=N : Set maximum level to N. A heading level larger than N is invalid and not included in TOC. Default is 3.
 * --front=0 : 0 to put the TOC after the first valid heading. 1 to put the TOC in front of the document. Default is 0. The is option is not used if there is `<!--toc-->` tag in the document.
 
 inputFile  
@@ -75,7 +74,7 @@ The generated markdown will be
 
 ## Why anther tool while there are existing tools to add TOC to markdown?
 
-Because I need some features lacked in other tools  
+Because I need some of the features missing from the other tools,
 
 1. Use `<a>` anchor tag as the TOC target. So that the existing markdown-to-HTML converter is happy with the TOC.  
-2. Selectively generate TOC for lengthy article with enough headings. I don't want to add `<!--toc->` for every article manually, and I want only longer article has TOC.
+2. Selectively generate TOC for long articles that contain enough headers. I don't want to add `<!--toc->` for every article manually, and I want only longer article has TOC. This is how the command option '--min-headings' is useful.

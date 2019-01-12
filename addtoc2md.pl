@@ -4,8 +4,8 @@ use warnings;
 
 my $args = {
 	minHeadingCount => 6,
-	minDepth => 2,
-	maxDepth => 3,
+	minLevel => 2,
+	maxLevel => 3,
 	atFront => 0
 };
 
@@ -30,11 +30,11 @@ sub doParseArgs
 		if($arg =~ /^\-\-min\-headings=(.*)/) {
 			$args->{minHeadingCount} = $1 + 0;
 		}
-		elsif($arg =~ /^\-\-min\-depth=(.*)/) {
-			$args->{minDepth} = $1 + 0;
+		elsif($arg =~ /^\-\-min\-level=(.*)/) {
+			$args->{minLevel} = $1 + 0;
 		}
-		elsif($arg =~ /^\-\-max\-depth=(.*)/) {
-			$args->{maxDepth} = $1 + 0;
+		elsif($arg =~ /^\-\-max\-level=(.*)/) {
+			$args->{maxLevel} = $1 + 0;
 		}
 		elsif($arg =~ /^\-\-front=(.*)/) {
 			$args->{atFront} = $1 + 0;
@@ -70,9 +70,9 @@ options:
     --min-headings=N      Set minimum heading count to N. If the valid heading
                           count is smaller than N, no TOC is created.
                           Default is 6.
-    --min-depth=N         Set minimum depth to N. A heading depth smaller than
+    --min-level=N         Set minimum level to N. A heading level smaller than
                           N is invalid and not included in TOC. Default is 2.
-    --max-depth=N         Set maximum depth to N. A heading depth larger than N
+    --max-level=N         Set maximum level to N. A heading level larger than N
                           is invalid and not included in TOC. Default is 3.
 	--front=0             0 to put the TOC after the first valid heading. 1 to
                           put the TOC in front of the document. Default is 0.
@@ -81,7 +81,7 @@ options:
 inputFile: The file name of the markdown file (.md). It can contain wildcard.
 The inputFile can be specified multiple times.
 
-Heading depth: h1 has depth 1, h2 has depth 2, etc.
+Heading level: h1 has level 1, h2 has level 2, etc.
 If there is <!--toc--> in the document (in a whole line), the TOC will be
 put in place of <!--toc--> mark.
 The option --front only takes effect when there is no <!--toc--> mark.
@@ -137,18 +137,18 @@ sub doProcessFile
 	}
 }
 
-sub isValidDepth
+sub isValidLevel
 {
-	my ($depth) = @_;
+	my ($level) = @_;
 	
-	return $depth >= $args->{minDepth} && $depth <= $args->{maxDepth};
+	return $level >= $args->{minLevel} && $level <= $args->{maxLevel};
 }
 
 sub doGetAnchorID
 {
-	my ($depth, $count) = @_;
+	my ($level, $count) = @_;
 	
-	return sprintf('a%d_%d', $depth, $count);
+	return sprintf('a%d_%d', $level, $count);
 }
 
 sub doTrim
@@ -167,7 +167,7 @@ sub doGetHeadingCount
 	my $count = 0;
 	doIterateHeadings($inputLines, sub {
 		my ($userData) = @_;
-		if(isValidDepth($userData->{depth})) {
+		if(isValidLevel($userData->{level})) {
 			++$count;
 		}
 		return $userData->{line};
@@ -250,7 +250,7 @@ sub doBuildToc
 	my ($lines) = @_;
 	
 	my $data = {
-		previousDepth => 10000,
+		previousLevel => 10000,
 		indentLevel => 0
 	};
 	
@@ -260,21 +260,21 @@ sub doBuildToc
 	
 	doIterateHeadings($lines, sub {
 		my ($userData) = @_;
-		my $depth = $userData->{depth};
-		if(isValidDepth($depth)) {
-			if($depth < $data->{previousDepth}) {
+		my $level = $userData->{level};
+		if(isValidLevel($level)) {
+			if($level < $data->{previousLevel}) {
 				--$data->{indentLevel};
 				$data->{indentLevel} = 0 if $data->{indentLevel} < 0;
 			}
-			if($depth > $data->{previousDepth}) {
+			if($level > $data->{previousLevel}) {
 				++$data->{indentLevel};
 			}
-			my $anchorId = &doGetAnchorID($userData->{depth}, $userData->{counts}->[$userData->{depth}]);
+			my $anchorId = &doGetAnchorID($userData->{level}, $userData->{counts}->[$userData->{level}]);
 			$result .= '  ' x $data->{indentLevel};
 			$result .= sprintf('* [%s](#%s)', doTrim($userData->{title}), $anchorId);
 			$result .= "\n";
 			
-			$data->{previousDepth} = $depth;
+			$data->{previousLevel} = $level;
 		}
 		return $userData->{line};
 	});
@@ -295,8 +295,8 @@ sub doAddAnchors
 		if($resultLineCount > 0 && $resultLines->[$resultLineCount - 1] =~ /^\s*\<a\s+/) {
 			pop(@{$resultLines});
 		}
-		if($canAdd && isValidDepth($userData->{depth})) {
-			my $anchorId = &doGetAnchorID($userData->{depth}, $userData->{counts}->[$userData->{depth}]);
+		if($canAdd && isValidLevel($userData->{level})) {
+			my $anchorId = &doGetAnchorID($userData->{level}, $userData->{counts}->[$userData->{level}]);
 			my $anchor = sprintf('<a id="%s"></a>' . "\n", $anchorId);
 			return (
 				$anchor,
@@ -336,7 +336,7 @@ sub doIterateHeadings
 	my ($inputLines, $callback) = @_;
 
 	my $data = {
-		depth => 0,
+		level => 0,
 		title => '',
 		line => '',
 		resultLines => undef,
@@ -348,12 +348,12 @@ sub doIterateHeadings
 		my ($line, $userData, $resultLines) = @_;
 		
 		if($line =~ /^\s*(#+)(.*)/) {
-			$data->{depth} = length($1);
+			$data->{level} = length($1);
 			$data->{title} = $2;
 			$data->{line} = $line;
 			$data->{resultLines} = $resultLines;
 			
-			++$data->{counts}->[$data->{depth}];
+			++$data->{counts}->[$data->{level}];
 			++$data->{totalCount};
 
 			return $callback->($data);

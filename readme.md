@@ -18,8 +18,10 @@ Adds table of content to Github flavored Markdown files.
 
 * Use `<a>` anchor tag as the TOC target. It doesn't depend on Github auto anchor feature.  
 * Can selectively generate TOC for lengthy article with enough headings. (The `--min-headings` option)
+* Repeating the command on the same file will replace the previous TOC instead of adding more TOC.
+* Code blocks can be handled correct, the code lines start with '#' won't be treated as headings.  
 
-**[Document for addtoc2md.pl](doc/addtoc2md.md)**
+**[Document for addtoc2md](doc/addtoc2md.md)**
 
 ### doku2md.pl
 
@@ -32,7 +34,7 @@ Converts Dokuwiki page files to Github flavored Markdown files.
 * Support image syntax.  
 * Customizable.  
 
-**[Document for doku2md.pl](doc/doku2md.md)**
+**[Document for doku2md](doc/doku2md.md)**
 
 ## Pull requests are welcome
 
