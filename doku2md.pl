@@ -45,7 +45,7 @@ our @replaceList = (
 		replacer => '**$1**'
 	},
 	{
-		pattern => qr!//\s*(.*?)\s*//!ms,
+		pattern => qr{(?<!http\:)//\s*(.*?)\s*(?<!http\:)//}m,
 		replacer => '*$1*'
 	},
 	{
@@ -283,9 +283,12 @@ sub doReplaceLink
 	my $title = '';
 	my $url = '';
 
-	if($text =~ /([^:]+?)\|(.*)/) {
+	if($text =~ /^\s*(.+?)\|(.*)$/) {
 		$title = $2;
 		$url = $1;
+		if($url !~ /http.?\:/) {
+			$url =~ s/.*\://;
+		}
 		$url =~ s/\.htm.?\s*$/.md/;
 	}
 	
