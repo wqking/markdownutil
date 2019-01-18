@@ -335,10 +335,10 @@ sub doReplaceImage
 	if($args->{htmlImage}) {
 		$result .= '<img src="' . $fileName . '"';
 		if($width ne '') {
-			$result .= ' width=' . $width;
+			$result .= ' width=' . &doubleQuote($width);
 		}
 		if($height ne '') {
-			$result .= ' height=' . $height;
+			$result .= ' height=' . &doubleQuote($height);
 		}
 		$result .= ' />';
 	}
@@ -354,4 +354,11 @@ sub doReplaceImage
 	}
 	
 	return $result;
+}
+
+sub doubleQuote
+{
+	my ($s) = @_;
+	
+	return '"' . $s . '"';
 }
