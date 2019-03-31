@@ -8,6 +8,8 @@ my $args = {
 	maxLevel => 3,
 	atFront => 0,
 	clear => 0,
+	beforeToc => '',
+	afterToc => '',
 };
 
 &doMain;
@@ -28,20 +30,28 @@ sub doParseArgs
 	}
 
 	foreach my $arg (@ARGV) {
-		if($arg =~ /^\-\-min\-headings=(.*)/) {
+		if($arg =~ /^\-\-min\-headings=(.*)$/) {
 			$args->{minHeadingCount} = $1 + 0;
 		}
-		elsif($arg =~ /^\-\-min\-level=(.*)/) {
+		elsif($arg =~ /^\-\-min\-level=(.*)$/) {
 			$args->{minLevel} = $1 + 0;
 		}
-		elsif($arg =~ /^\-\-max\-level=(.*)/) {
+		elsif($arg =~ /^\-\-max\-level=(.*)$/) {
 			$args->{maxLevel} = $1 + 0;
 		}
-		elsif($arg =~ /^\-\-front=(.*)/) {
+		elsif($arg =~ /^\-\-front=(.*)$/) {
 			$args->{atFront} = $1 + 0;
 		}
 		elsif($arg =~ /^\-\-clear$/) {
 			$args->{clear} = 1;
+		}
+		elsif($arg =~ /^\-\-beforetoc=(.*)$/) {
+			$args->{beforeToc} = &doNormalizeText($1);
+			$args->{beforeToc} .= "\n" unless $args->{beforeToc} eq '';
+		}
+		elsif($arg =~ /^\-\-aftertoc=(.*)$/) {
+			$args->{afterToc} = &doNormalizeText($1);
+			$args->{afterToc} = "\n" . $args->{afterToc} unless $args->{afterToc} eq '';
 		}
 		elsif($arg =~ /^\-(.*)/) {
 			die sprintf("Unknow option -%s.\n", $1);
@@ -56,6 +66,16 @@ sub doParseArgs
 	}
 	
 	return $args;
+}
+
+sub doNormalizeText
+{
+	my ($text) = @_;
+	
+	$text =~ s/(?<!\\)\\n/\n/g;
+	$text =~ s/\\\\/\\/g;
+	
+	return $text;
 }
 
 sub usage
@@ -84,6 +104,12 @@ options:
                           in the document.
 	--clear               Remove all generated TOC. Don't generate new TOC.
 	                       '<!--toc-->' is placed where the TOC was.
+    --beforetoc=S         Put the text S before the TOC. A new line is added
+	                      between S and TOC. \n is replaced with new line break.
+						  \\ is replaced with \.
+    --aftertoc=S          Put the text S after the TOC. A new line is added
+	                      between TOC and S. \n is replaced with new line break.
+						  \\ is replaced with \.
 inputFile: The file name of the markdown file (.md). It can contain wildcard.
 The inputFile can be specified multiple times.
 
@@ -121,10 +147,20 @@ sub doProcessFile
 	my $canAdd = (doGetHeadingCount($lines) >= $args->{minHeadingCount}) && ! doHasNoToc($lines) && ! $args->{clear};
 	
 	$lines = doRemoveToc($lines);
-	$lines = doAddAnchors($lines, $canAdd);
+
+	$lines = doAddAnchors($lines, 0);
+	if($args->{beforeToc} ne '') {
+		$lines = &doRemoveFromLines($lines, $args->{beforeToc});
+	}
+	if($args->{afterToc} ne '') {
+		$lines = &doRemoveFromLines($lines, $args->{afterToc});
+	}
+
+	$lines = doAddAnchors($lines, $canAdd) if($canAdd);
 	
 	if($canAdd) {
 		my $toc = doBuildToc($lines);
+		$toc = $args->{beforeToc} . $toc . $args->{afterToc};
 		my $newLines = doAddTocAtTag($lines, $toc);
 		if(defined($newLines)) {
 			$lines = $newLines;
@@ -141,6 +177,16 @@ sub doProcessFile
 		print OFH join('', @{$lines});
 		close OFH;
 	}
+}
+
+sub doRemoveFromLines
+{
+	my ($lines, $replacement) = @_;
+	my $text = join('', @{$lines});
+	$text =~ s/$replacement//;
+	my @newLines = split(/\n/, $text);
+	my @temp = map { $_ . "\n" } @newLines;
+	return \@temp;
 }
 
 sub isValidLevel
