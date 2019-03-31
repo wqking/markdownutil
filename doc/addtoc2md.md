@@ -21,6 +21,7 @@ options
 * --min-level=N : Set minimum level to N. A heading level smaller than N is invalid and not included in TOC. Default is 2.
 * --max-level=N : Set maximum level to N. A heading level larger than N is invalid and not included in TOC. Default is 3.
 * --front=0 : 0 to put the TOC after the first valid heading. 1 to put the TOC in front of the document. Default is 0. The is option is not used if there is `<!--toc-->` tag in the document.
+* --clear : Remove all generated TOC. Don't generate new TOC. `<!--toc-->` is placed where the TOC was. This option creates clean document files that are easier to edit.
 
 inputFile  
 The file name of the markdown file (.md). It can contain wildcard. The inputFile can be specified multiple times.  

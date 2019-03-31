@@ -6,7 +6,8 @@ my $args = {
 	minHeadingCount => 6,
 	minLevel => 2,
 	maxLevel => 3,
-	atFront => 0
+	atFront => 0,
+	clear => 0,
 };
 
 &doMain;
@@ -38,6 +39,9 @@ sub doParseArgs
 		}
 		elsif($arg =~ /^\-\-front=(.*)/) {
 			$args->{atFront} = $1 + 0;
+		}
+		elsif($arg =~ /^\-\-clear$/) {
+			$args->{clear} = 1;
 		}
 		elsif($arg =~ /^\-(.*)/) {
 			die sprintf("Unknow option -%s.\n", $1);
@@ -78,6 +82,8 @@ options:
                           put the TOC in front of the document. Default is 0.
                           The is option is not used if there is <!--toc--> mark
                           in the document.
+	--clear               Remove all generated TOC. Don't generate new TOC.
+	                       '<!--toc-->' is placed where the TOC was.
 inputFile: The file name of the markdown file (.md). It can contain wildcard.
 The inputFile can be specified multiple times.
 
@@ -112,7 +118,7 @@ sub doProcessFile
 	
 	my $lines = \@lineList;
 	
-	my $canAdd = (doGetHeadingCount($lines) >= $args->{minHeadingCount}) && ! doHasNoToc($lines);
+	my $canAdd = (doGetHeadingCount($lines) >= $args->{minHeadingCount}) && ! doHasNoToc($lines) && ! $args->{clear};
 	
 	$lines = doRemoveToc($lines);
 	$lines = doAddAnchors($lines, $canAdd);
