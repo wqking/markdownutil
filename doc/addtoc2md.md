@@ -22,8 +22,8 @@ options
 * --max-level=N : Set maximum level to N. A heading level larger than N is invalid and not included in TOC. Default is 3.
 * --front=0 : 0 to put the TOC after the first valid heading. 1 to put the TOC in front of the document. Default is 0. The is option is not used if there is `<!--toc-->` tag in the document.
 * --clear : Remove all generated TOC. Don't generate new TOC. `<!--toc-->` is placed where the TOC was. This option creates clean document files that are easier to edit.
-* --beforetoc=S : Put the text S before the TOC. A new line is added between S and TOC. \n is replaced with new line break. \\ is replaced with \. A typical usage is "--beforetoc=## Table Of Contents\n".
-* --aftertoc=S : Put the text S after the TOC. A new line is added between TOC and S. S is replaced with the same rules as --beforetoc.
+* --before-toc=S : Put the text S before the TOC. A new line is added between S and TOC. \n is replaced with new line break. \\ is replaced with \. A typical usage is "--before-toc=## Table Of Contents\n".
+* --after-toc=S : Put the text S after the TOC. A new line is added between TOC and S. S is replaced with the same rules as --before-toc.
 
 inputFile  
 The file name of the markdown file (.md). It can contain wildcard. The inputFile can be specified multiple times.  

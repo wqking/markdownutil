@@ -45,11 +45,11 @@ sub doParseArgs
 		elsif($arg =~ /^\-\-clear$/) {
 			$args->{clear} = 1;
 		}
-		elsif($arg =~ /^\-\-beforetoc=(.*)$/) {
+		elsif($arg =~ /^\-\-before\-toc=(.*)$/) {
 			$args->{beforeToc} = &doNormalizeText($1);
 			$args->{beforeToc} .= "\n" unless $args->{beforeToc} eq '';
 		}
-		elsif($arg =~ /^\-\-aftertoc=(.*)$/) {
+		elsif($arg =~ /^\-\-after\-toc=(.*)$/) {
 			$args->{afterToc} = &doNormalizeText($1);
 			$args->{afterToc} = "\n" . $args->{afterToc} unless $args->{afterToc} eq '';
 		}
@@ -104,10 +104,10 @@ options:
                           in the document.
 	--clear               Remove all generated TOC. Don't generate new TOC.
 	                       '<!--toc-->' is placed where the TOC was.
-    --beforetoc=S         Put the text S before the TOC. A new line is added
+    --before-toc=S         Put the text S before the TOC. A new line is added
 	                      between S and TOC. \n is replaced with new line break.
 						  \\ is replaced with \.
-    --aftertoc=S          Put the text S after the TOC. A new line is added
+    --after-toc=S          Put the text S after the TOC. A new line is added
 	                      between TOC and S. \n is replaced with new line break.
 						  \\ is replaced with \.
 inputFile: The file name of the markdown file (.md). It can contain wildcard.
