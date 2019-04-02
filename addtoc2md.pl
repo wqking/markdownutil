@@ -147,20 +147,10 @@ sub doProcessFile
 	my $canAdd = (doGetHeadingCount($lines) >= $args->{minHeadingCount}) && ! doHasNoToc($lines) && ! $args->{clear};
 	
 	$lines = doRemoveToc($lines);
-
-	$lines = doAddAnchors($lines, 0);
-	if($args->{beforeToc} ne '') {
-		$lines = &doRemoveFromLines($lines, $args->{beforeToc});
-	}
-	if($args->{afterToc} ne '') {
-		$lines = &doRemoveFromLines($lines, $args->{afterToc});
-	}
-
 	$lines = doAddAnchors($lines, $canAdd) if($canAdd);
 	
 	if($canAdd) {
 		my $toc = doBuildToc($lines);
-		$toc = $args->{beforeToc} . $toc . $args->{afterToc};
 		my $newLines = doAddTocAtTag($lines, $toc);
 		if(defined($newLines)) {
 			$lines = $newLines;
@@ -309,6 +299,7 @@ sub doBuildToc
 	my $result = '';
 	
 	$result .= "<!--begintoc-->\n";
+	$result .= $args->{beforeToc};
 	
 	doIterateHeadings($lines, sub {
 		my ($userData) = @_;
@@ -331,6 +322,7 @@ sub doBuildToc
 		return $userData->{line};
 	});
 
+	$result .= $args->{afterToc};
 	$result .= "<!--endtoc-->\n";
 	
 	return $result;
