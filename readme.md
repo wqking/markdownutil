@@ -12,6 +12,8 @@ Apache License, Version 2.0
 
 ### addtoc2md.pl
 
+**This tool is deprecated and not maintained. Please use the [Python tool markdown-toc](https://github.com/wqking/markdown-toc)**
+
 Adds table of contents to Github flavored Markdown files.
 
 **Features**  
